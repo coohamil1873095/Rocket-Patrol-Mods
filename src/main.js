@@ -1,13 +1,16 @@
 //-----------------------------------------------------------------------------
 // 
 // Connor Hamilton 
-// (mod title)
-// (approx time)
+// Rocket Patrol 2.0: Mayhem
+// 6 Hours
 // Tracking High Score - 1
 // FIRE UI from Original - 1
 // Move while firing - 1
+// Speed increase after 30 seconds - 1
 // Time Remaining - 3
+// 4 Random Explosion sfx - 3
 // Adds time for hits - 5
+// Particle emitter explosion - 5
 //
 //-----------------------------------------------------------------------------
 

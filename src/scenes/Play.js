@@ -11,6 +11,9 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
+
+        // load image for particle emitter
+        this.load.image('yellow', './assets/yellow.png');
       }
 
     create() {
@@ -59,7 +62,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'S: ' + this.p1Score, this.scoreConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, this.scoreConfig);
         
         // display high score
         this.highScoreText = this.add.text(borderUISize + borderPadding*43, borderUISize + borderPadding*2, highScore, this.scoreConfig);
@@ -75,6 +78,14 @@ class Play extends Phaser.Scene {
         
         // GAME OVER flag
         this.gameOver = false;
+
+        this.speedClock = this.time.delayedCall(30000, () => {
+            this.ship01.moveSpeed += 2;
+            this.ship02.moveSpeed += 2;
+            this.ship03.moveSpeed += 2;
+        });
+        
+        
     }
 
     update(time, delta) {
@@ -150,6 +161,17 @@ class Play extends Phaser.Scene {
         }
     }
 
+    // particle emitter function
+    emitParticles(ship) {
+        let particles = this.add.particles(ship.x+10, ship.y+10, 'yellow', {
+            speed: 100,
+            lifespan: 300,
+            scale: { start: 0.70, end: 0, ease: 'sine.out' },
+            gravityY: 100
+        });
+        particles.explode(20);
+    }
+
     shipExplode(ship) {
         // temporarily hide ship
         ship.alpha = 0;
@@ -162,6 +184,8 @@ class Play extends Phaser.Scene {
             boom.destroy();
         });
 
+        this.emitParticles(ship);
+
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
@@ -170,6 +194,23 @@ class Play extends Phaser.Scene {
         this.addTime = true;
         this.timeLeft += (ship.points / 10) + 1;
 
-        this.sound.play('sfx_explosion');
+        // generate random number and play designated sfx
+        let rand = Phaser.Math.Between(1, 5);
+        if (rand == 1) {
+            this.sound.play('sfx_explosion_1');
+        }
+        else if (rand == 2) {
+            this.sound.play('sfx_explosion_2');
+        }
+        else if (rand == 3) {
+            this.sound.play('sfx_explosion_3');
+        }
+        else if (rand == 4) {
+            this.sound.play('sfx_explosion_4');
+        }
+        else if (rand == 5) {
+            this.sound.play('sfx_explosion_5');
+        }
+        
     }
 }
